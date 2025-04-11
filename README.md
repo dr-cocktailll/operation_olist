@@ -238,4 +238,28 @@ from scipy import stats
   - `scipy.stats` (t-tests, Shapiro–Wilk, p-values).  
   - `statsmodels` (optional) for regression analysis.
 
+---
 
+## Project Structure
+├── README.md                        # This file
+├── slides.pdf                    # Final presentation slides
+├── data/                            # Cleaned and raw datasets
+│   ├── orders.csv
+│   ├── products.csv
+│   ├── order_reviews.csv
+│   ├── order_payments.csv
+│   ├── geolocation.csv
+│   └── sellers.csv
+├── scripts/                         # Data processing & analysis scripts
+│   ├── data_cleaning.py
+│   ├── analysis_operations.py
+│   ├── analysis_repeat.py
+│   ├── analysis_online_ops.py
+│   └── main.py
+├── tableau/                         # Tableau dashboards and visualizations
+│   ├── operations_sales_dashboard.tableau
+│   ├── repeat_purchase_dashboard.tableau
+│   └── online_ops_dashboard.tableau
+├── results/                         # Final processed outputs
+│   ├── freight_ratio_analysis.csv
+│   ├── category_combinations.csv
