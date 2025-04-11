@@ -1,5 +1,6 @@
 # operation_olist
 ---
+datasets fro: https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 A **comprehensive exploration** of **Olist**’s e-commerce business in Brazil, covering topics such as **sales drivers**, **repeat purchases**, and **online operational factors** (e.g., listing optimization, payment options).
 
 ---
