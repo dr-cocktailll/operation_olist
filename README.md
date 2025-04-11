@@ -78,7 +78,7 @@ These files provide a **multidimensional** view of Olist’s operations: from **
 - **Title/Description Length** = e.g., `product_name_length`, `product_description_length`.
 
 **Libraries** used for data cleaning:  
-```python
+
 import pandas as pd
 import numpy as np
 from scipy import stats
