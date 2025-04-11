@@ -239,10 +239,14 @@ from scipy import stats
   - `statsmodels` (optional) for regression analysis.
 
 ---
+---
 
 ## Project Structure
+
+```bash
+.
 ├── README.md                        # This file
-├── slides.pdf                    # Final presentation slides
+├── BT slides.pdf                    # Final presentation slides
 ├── data/                            # Cleaned and raw datasets
 │   ├── orders.csv
 │   ├── products.csv
@@ -263,3 +267,4 @@ from scipy import stats
 ├── results/                         # Final processed outputs
 │   ├── freight_ratio_analysis.csv
 │   ├── category_combinations.csv
+
