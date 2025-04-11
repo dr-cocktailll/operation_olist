@@ -5,176 +5,237 @@ A data-driven project analyzing **Olist**’s e-commerce business in Brazil to i
 
 ---
 
+# Operation_Olise
+
+A **comprehensive exploration** of **Olist**’s e-commerce business in Brazil, covering topics such as **sales drivers**, **repeat purchases**, and **online operational factors** (e.g., listing optimization, payment options). This README consolidates all steps, insights, and recommendations drawn from the accompanying slides (`BT slides.pdf`) and analytics workflows.
+
+---
+
 ## Table of Contents
-1. [Project Overview](#project-overview)  
-2. [Data Cleaning](#data-cleaning)  
-3. [Analysis Focus](#analysis-focus)  
-4. [Key Findings & Insights](#key-findings--insights)  
-    - [Sales Drivers](#sales-drivers)  
-    - [Repeat Purchases](#repeat-purchases)  
-    - [Online Operations](#online-operations)  
-5. [Recommendations](#recommendations)  
-6. [How to Explore This Repo](#how-to-explore-this-repo)  
-7. [License & Acknowledgments](#license--acknowledgments)
+1. [Project Context](#project-context)  
+2. [Data Sources & Overview](#data-sources--overview)  
+3. [Data Cleaning & Preprocessing](#data-cleaning--preprocessing)  
+4. [Slide-by-Slide Analysis](#slide-by-slide-analysis)  
+   - [1. Brazil E-Commerce Context](#1-brazil-e-commerce-context)  
+   - [2. Data Cleaning Details](#2-data-cleaning-details)  
+   - [3. Operations & Sales](#3-operations--sales)  
+   - [4. Repeat Purchases](#4-repeat-purchases)  
+   - [5. Online Operations](#5-online-operations)  
+   - [6. Conclusion & Recommendations](#6-conclusion--recommendations)  
+5. [Key Insights & Derived Files](#key-insights--derived-files)  
+6. [Technical Details & Libraries](#technical-details--libraries)  
+7. [Project Structure](#project-structure)  
+8. [Acknowledgments & Disclaimer](#acknowledgments--disclaimer)
 
 ---
 
-## Project Overview
-**Olist** is an e-commerce platform connecting Brazilian merchants to major marketplaces. We analyzed **real-world data** (orders, products, reviews, deliveries, etc.) spanning 2016–2018 to address the following questions:
+## Project Context
+**Olist** serves as a channel for Brazilian merchants to sell on multiple marketplaces. Between **2016–2018**, it experienced notable growth within an expanding e-commerce market. At the same time, **logistical complexities** (e.g., long distances, varying infrastructure) introduced challenges:
 
-1. **Which factors drive product sales?**  
-2. **How do shipping, freight, and location affect repeat purchases?**  
-3. **What online operational elements (listings, images, payment methods) influence overall sales performance?**
-
-Brazil’s e-commerce market has grown **significantly**, presenting both **opportunities** (large customer base) and **challenges** (logistical complexity in a vast country).
+- **Goal**: Pinpoint **what** drives sales (categories, locations, promotions), **why** customers repurchase (delivery reliability, freight costs), and **how** to optimize online operations (listing design, payment methods).
 
 ---
 
-## Data Cleaning
-1. **Row Removal**  
-   - Omitted rows with critical nulls (e.g., missing `orders.csv` and `products.csv` data).  
-   - Retained rows in `order_reviews.csv` when missing only non-critical attributes (e.g., review comment title).
+## Data Sources & Overview
+This project integrates multiple datasets (commonly obtained from the **public Olist dataset** on Brazilian e-commerce):
 
-2. **Category Renaming**  
-   - Renamed product category attributes (e.g., `sports_leisure` → `Sports Leisure`) for clarity.
+1. **`orders.csv`**  
+   - Order-level details: IDs, timestamps, status, estimated vs. actual delivery time.  
+2. **`products.csv`**  
+   - Category, product dimensions, number of images (`product_photos_qty`), name length, etc.  
+3. **`order_reviews.csv`**  
+   - Customer review ratings, title, comment.  
+4. **`order_payments.csv`**  
+   - Payment method, number of installments, total payment, etc.  
+5. **`geolocation.csv`**  
+   - Latitude/longitude data for mapping states and regions.  
+6. **`sellers.csv`** (less frequently used for the final slides)  
+   - Seller IDs, origin addresses, shipping time.
 
-3. **Outlier Detection**  
-   - **Freight Costs**: Removed extreme outliers (e.g., 1795, 1002 in the dataset) to focus on meaningful comparisons.
-
-By refining the dataset, we ensured **reliable** insights without skewed or incomplete records.
-
----
-
-## Analysis Focus
-Our analysis centers on three main pillars:
-
-1. **Operations & Sales**  
-   - **Location & Category**: Identify top-selling product categories and regions.  
-   - **Complementary Purchases**: Examine frequent multi-category orders.  
-   - **Seasonality**: Explore monthly/quarterly sales trends (holiday peaks, back-to-school spikes).  
-   - **Shipping & Freight Costs**: Investigate whether higher costs deter sales.
-
-2. **Repeat Purchases**  
-   - **Delivery Reliability**: On-time vs. early/late deliveries and their effect on repeat orders.  
-   - **Geographic Factors**: Distribution hubs vs. remote regions and their correlation with loyalty.  
-   - **Freight Cost Impact**: Relationship between high shipping costs and repeat purchase rates.
-
-3. **Online Operations**  
-   - **Product Listings**: Number of images, title length, and description length.  
-   - **Payment Methods**: Credit card vs. others, multi-payment usage, installment plans.  
-   - **Installments**: Potential to boost sales and average order value.
+These files provide a **multidimensional** view of Olist’s operations: from **product listings** and **customer satisfaction** to **payment** and **logistics**.
 
 ---
 
-## Key Findings & Insights
+## Data Cleaning & Preprocessing
+### Null & Missing Values
+- **Row Removal**  
+  - **Critical Nulls**: Rows in `orders.csv` or `products.csv` with missing essential fields (e.g., price, freight cost, category) were dropped. For instance, ~2,980 rows from `orders.csv` and ~611 from `products.csv`.  
+  - **Non-Critical Nulls**: In `order_reviews.csv`, missing review titles/comments didn’t invalidate entire rows since rating data was present. Such rows were kept.
 
-### Sales Drivers
-- **Top Product Categories**:  
-  1. Bed & Bath Table  
-  2. Health & Beauty  
-  3. Sports & Leisure  
-  4. Furniture & Decor  
-  5. Computer Accessories  
-  Together, these account for ~40% of all products sold.
+### Category Renaming
+- Standardized naming:  
+  - Example: `sports_leisure` → **Sports & Leisure**, `bed_bath_table` → **Bed & Bath Table**.  
+  - Ensures clarity for plotting and easier interpretation.
 
-- **Top Regions**:  
-  - **São Paulo** (SP), **Rio de Janeiro** (RJ), and **Minas Gerais** (MG) make up ~66.7% of sales.  
-  - Urban areas with higher GDP per capita tend to show **increased** sales volume.
+### Outlier Detection
+- **Freight Cost**: 
+  - Boxplots and **IQR** methods identified extremely high freight values (e.g., 1795, 1002).  
+  - Removed these outliers (~2–3 rows), preventing skewed comparisons or inflated averages.
 
-- **Complementary Purchases**:  
-  - Categories like **Bed & Bath Table + Furniture Decor** and **Home Comfort + Housewares** often appear together in multi-item orders, indicating potential bundling strategies.
+### Derived Columns
+- **Freight-to-Price Ratio** = `freight_value / price`. Normalizes shipping costs for different price points.  
+- **Product Images** = `product_photos_qty`.  
+- **Title/Description Length** = e.g., `product_name_length`, `product_description_length`.
 
-- **Seasonality**:  
-  - **Holiday Season (Nov–Dec)** sees spikes in Toys, Bed & Bath Table, Furniture & Decor.  
-  - **Back-to-School (Jan–Feb)** drives Stationary & Computer Accessories.  
-  - **Mid-year (Mar–Jul)** sees Housewares and Health & Beauty gains.
+**Libraries** used for data cleaning:  
+```python
+import pandas as pd
+import numpy as np
+from scipy import stats
 
-- **Freight Costs vs. Sales**:  
-  - No direct linear correlation. **Price normalization** (freight-to-price ratio) shows that shipping cost alone isn’t a guaranteed barrier—other factors (e.g., brand, product category) also influence sales.
+# Slide-by-Slide Analysis
 
-### Repeat Purchases
-- **Delivery Reliability > Speed**:  
-  - **On-time deliveries** have the **highest** repeat purchase rate (~5.67%).  
-  - Early or late arrivals introduce uncertainty, reducing loyalty.
+## 1. Brazil E-Commerce Context
+**Slides:** “Context: The Brazil E-Commerce Market”, “However… The Vast Geography”, “Growth in Olist’s Business”
 
-- **Geographic Proximity**:  
-  - Customers in southern states near Olist’s HQ have higher repeat rates, correlating with lower freight costs and more reliable delivery times.
-
-- **Freight Cost**:  
-  - Repeat purchasers often see **lower** average freight costs. The difference isn’t enormous, but it’s consistent across the data.
-
-- **Category Loyalty**:  
-  - Smaller categories like **La Cuisine**, **Arts & Crafts**, and **Fashion: Children** show **high repeat-purchase proportions** (loyal niche customer bases).
-
-### Online Operations
-- **Number of Product Images**:  
-  - ~6–7 images per listing optimizes customer interest (p < 0.01).  
-  - More than 12 images sees diminishing returns due to small sample sizes.
-
-- **Product Title & Description Length**:  
-  - No clear “optimal” character count. Spikes observed likely outliers with specialized products.
-
-- **Payment Preferences**:  
-  - **Credit Cards** dominate (78.34% usage).  
-  - **Installments** used in ~71% of total sales volume; also drive **70.2% higher** average order value.
-
-- **Installment Duration**:  
-  - No direct link between more months and higher order value—customers simply appreciate flexible payment.
+- By 2018, Brazil reached **~$18.9 billion** in e-commerce revenue, leading Latin America.  
+- **Olist’s 66%** surge from 2016–18 aligns with national growth but underscores **logistical concerns** (long distances, higher costs).  
+- Data sources like **PagBrasil** and **EOS Intelligence** highlight these challenges in shipping reliability and cost.
 
 ---
 
-## Recommendations
+## 2. Data Cleaning Details
+**Slides:** “Data Cleaning”, “Row Removal”, “Category Renaming”, “Outlier Detection”
 
-1. **Targeted Advertising**  
-   - **Focus** on São Paulo, Rio de Janeiro, Minas Gerais.  
-   - Highlight top categories in each region.
-
-2. **Seasonal Promotions**  
-   - **Holiday Season** (Nov–Dec): Toys, Bed & Bath Table, Furniture & Decor.  
-   - **Back-to-School** (Jan–Feb): Stationary, Computers & Accessories.  
-   - **Mar–Jul**: Housewares, Health & Beauty, Sports & Leisure.
-
-3. **Bundled Discounts**  
-   - Combine frequently co-purchased items (e.g., Bed & Bath Table + Furniture Decor).
-
-4. **Logistics Optimization**  
-   - **On-Time Delivery** is crucial. Minimize variance by partnering with reliable shippers.  
-   - Establish distribution hubs near distant regions to reduce freight cost and speed up deliveries.
-
-5. **Customer Loyalty Programs**  
-   - Focus on categories showing strong repeat potential (La Cuisine, Arts & Crafts, Children’s Fashion).  
-   - Offer region-specific incentives or shipping discounts to keep freight costs manageable.
-
-6. **Listing Improvements**  
-   - Enforce **minimum 3 product images**, recommend ~6–7 to boost buyer confidence.  
-   - Consider A/B testing for advanced listing details.
-
-7. **Installment & BNPL Options**  
-   - Partner with local installment services (Cleo, ADDI, DiniePay).  
-   - Market “Buy Now, Pay Later” to increase average order value and expand the customer base.
+- Each file had nulls; we **selectively removed critical rows** (e.g., missing price, freight) but retained partial nulls where feasible.  
+- **Freight cost outliers**: Removed after boxplot analysis, ensuring more robust freight comparisons.  
+- This **preprocessing** step is vital to achieve **accurate** and **clean** analyses downstream.
 
 ---
 
-## How to Explore This Repo
+## 3. Operations & Sales
 
-1. **Slides**:  
-   - `BT slides.pdf`: Detailed visuals and discussion points for the entire analysis.
+### Top Product Categories
+**Slide:** “Top Selling Products in Brazil”  
+- **Result**: ~40% of all products sold fell into:
+  1. **Bed & Bath Table**  
+  2. **Health & Beauty**  
+  3. **Sports & Leisure**  
+  4. **Furniture & Decor**  
+  5. **Computer Accessories**  
 
-2. **.tableau Files**:  
-   - Interactive dashboards that illustrate shipping costs, seasonality, repeat purchases, etc.
+### Geographic Breakdown
+**Slide:** “Top Selling Regions in Brazil”  
+- **Result**: **São Paulo (SP), Rio de Janeiro (RJ), and Minas Gerais (MG)** account for ~66.7% of total orders.  
+- Larger, more urban states → higher purchasing power, thus higher sales.
 
-3. **Data & Scripts**:  
-   - If included, refer to `data/` folder for cleaned CSVs and code scripts used for deeper analysis.
+### Category Combinations
+**Slide:** “Is Buying Multiple Categories Together a Factor?”  
+- Example combos: **Bed & Bath Table + Furniture Decor**.  
+- Indicates that **bundling** might boost average cart value.
 
-4. **Recommendations Summary**:  
-   - Review the final section in the slides or the bullets above to understand next steps.
+### Seasonality
+**Slide:** “Is Seasonality a Factor…?”  
+- **Nov–Dec** peaks for Toys, Furniture & Decor, etc. → **holiday & Black Friday** effect.  
+- **Jan–Feb** spikes for Stationery & Computer Accessories → **back-to-school**.  
+- Targeting promotions around these windows can **increase sales**.
+
+### Freight Costs
+**Slide:** “Are Shipping and Freight Costs a Factor…?”  
+- While shipping cost alone isn’t the biggest determinant of sales volume, **high freight cost** can still dissuade certain buyers (especially if alternatives exist).
 
 ---
 
-## License & Acknowledgments
-- **License**: This project is for educational and demonstration purposes.  
-- **Acknowledgments**:  
-  - Thank you to Olist for the open dataset and the Brazilian e-commerce context.  
-  - Shoutout to the course instructors and teammates for guidance in data cleaning, analysis, and storytelling.
+## 4. Repeat Purchases
 
-> **Disclaimer**: All insights are based on a provided dataset and may not reflect real-world shifts after the study period. Further validation with updated data is recommended.
+### Delivery Reliability
+**Slide:** “Does Faster Delivery Times Lead to Higher Chance…”  
+- **On-time deliveries** yield the best repeat rate (~5.67%).  
+- Early or late arrivals introduce uncertainty.
+
+### Standard Deviation in Delivery Days
+**Slide:** “What are the Possible Reasons…?”  
+- Late deliveries can range from 1 day to 2+ weeks (std ~15).  
+- **Consistency** (predictable timing) seems more important than sheer speed.
+
+### Category Loyalty
+**Slide:** “Which Product Categories Have Highest Repeat Purchases?”  
+- **La Cuisine** ~15% repeat purchase rate, followed by **Arts & Crafts** and **Fashion: Children**.  
+- Suggests smaller, niche categories can build **loyal customer bases**.
+
+### Freight Cost Influence
+**Slides:** “Does Higher Freight Cost Impact Repeat Purchasers?”  
+- Boxplots reveal that **one-time** customers pay slightly higher freight on average.  
+- Lower freight cost correlates with higher loyalty, especially in states near Olist’s HQ (Paraná).
+
+### Geographic Factors
+**Slide:** “Do Geographic Factors Impact Repeat Purchases?”  
+- Heatmap indicates **southern Brazil** sees higher repeat rates; presumably due to lower shipping costs and on-time deliveries.
+
+---
+
+## 5. Online Operations
+
+### Listing Optimization
+**Slides:** “Does the Number of Product Images Affect Sales?”, “Does the Length of Product Title/Description Affect Sales?”  
+- ~**6–7 images** yield a **significant** p-value (<0.05) correlation with higher orders per listing.  
+- Title/Description length tests had p ~0.14 → **not significant**.
+
+### Payment Options
+**Slides:** “Does Payment Options Affect the Number of Orders?”, “Number of Payment Methods”  
+- ~**78.34%** of orders use **credit card**; **94.9%** of customers used only **1 method** per order.  
+- Payment diversity (multiple methods) is rare.
+
+### Installments
+**Slides:** “Does the Presence of Installment Payment Options Influence Total Sales?”  
+- ~**71%** of total sales volume use installments, with a **~70.2% higher** average order value.  
+- The **number** of installment months doesn’t strongly affect order value, but **having** the option matters.
+
+---
+
+## 6. Conclusion & Recommendations
+**Slides:** “Final Recommendations”, “Conclusion”
+
+- **Targeted Advertising**  
+  Focus on top regions (SP, RJ, MG). Align ads with product categories that sell best there.
+
+- **Seasonal Promotions**  
+  Maximize holiday and back-to-school windows for relevant categories.
+
+- **Bundled Discounts**  
+  Combine complementary categories (Bed & Bath Table + Furniture Decor, Housewares + Home Comfort).
+
+- **Logistics & Delivery**  
+  Strive for **on-time** over early. Uncertainty hurts loyalty.  
+  Consider **satellite hubs** to reduce freight in remote states.
+
+- **Payment Flexibility**  
+  Partner with local BNPL (Buy Now, Pay Later) providers (Cleo, ADDI, DiniePay).  
+  Encourage installment usage to boost average order value.
+
+- **Listing Requirements**  
+  Minimum 3 images, recommended 6–7 to increase listing attractiveness.
+
+---
+
+## Key Insights & Derived Files
+
+### Freight-to-Price Ratio CSV
+- Created by merging **`orders.csv`** and **`products.csv`**, then adding `freight_value / price` as a new column.
+
+### Image vs. Orders Analysis
+- A separate script/notebook tested **polynomial regression** or **ANOVA** → found p < 0.05 for images correlation.
+
+### Seasonality & Time Series
+- Aggregated monthly orders from `order_purchase_timestamp`.  
+- Merged with product categories to identify monthly/seasonal peaks.
+
+### Niche Categories
+- Subset queries in `order_items` data, grouping by category to track repeat purchase rates.
+
+---
+
+## Technical Details & Libraries
+
+- **Data Wrangling**  
+  - `pandas`, `numpy`, `pyjanitor` (optional) for cleaning, merging, group-bys.
+
+- **Visualization**  
+  - `matplotlib` or `seaborn` for charts (boxplots, scatter, bar charts).  
+  - **Tableau** (.tableau files) for interactive dashboards, geographic maps.
+
+- **Statistical Testing**  
+  - `scipy.stats` (t-tests, Shapiro–Wilk, p-values).  
+  - `statsmodels` (optional) for regression analysis.
+
+
