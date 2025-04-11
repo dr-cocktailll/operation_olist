@@ -1,11 +1,5 @@
 # operation_olist
-
-A project analyzing **Olist**’s e-commerce business in Brazil to identify key drivers of **sales**, **repeat purchases**, and **online operational efficiency**. This repository outlines the **analysis**, **findings**, and **recommendations** based on the slides provided (`BT slides.pdf`). The .tableau files in the repository capture interactive visualizations and dashboards for deeper insights.
-
 ---
-
-# Operation_Olise
-
 A **comprehensive exploration** of **Olist**’s e-commerce business in Brazil, covering topics such as **sales drivers**, **repeat purchases**, and **online operational factors** (e.g., listing optimization, payment options). This README consolidates all steps, insights, and recommendations drawn from the accompanying slides (`BT slides.pdf`) and analytics workflows.
 
 ---
