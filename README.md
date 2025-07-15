@@ -11,17 +11,10 @@ A **comprehensive exploration** of **Olist**’s e-commerce business in Brazil, 
 1. [Project Context](#project-context)  
 2. [Data Sources & Overview](#data-sources--overview)  
 3. [Data Cleaning & Preprocessing](#data-cleaning--preprocessing)  
-4. [Slide-by-Slide Analysis](#slide-by-slide-analysis)  
-   - [1. Brazil E-Commerce Context](#1-brazil-e-commerce-context)  
-   - [2. Data Cleaning Details](#2-data-cleaning-details)  
-   - [3. Operations & Sales](#3-operations--sales)  
-   - [4. Repeat Purchases](#4-repeat-purchases)  
-   - [5. Online Operations](#5-online-operations)  
-   - [6. Conclusion & Recommendations](#6-conclusion--recommendations)  
-5. [Key Insights & Derived Files](#key-insights--derived-files)  
-6. [Technical Details & Libraries](#technical-details--libraries)  
-7. [Project Structure](#project-structure)  
-8. [Acknowledgments & Disclaimer](#acknowledgments--disclaimer)
+4. [Key Insights & Derived Files](#key-insights--derived-files)  
+5. [Technical Details & Libraries](#technical-details--libraries)  
+6. [Project Structure](#project-structure)  
+7. [Acknowledgments & Disclaimer](#acknowledgments--disclaimer)
 
 ---
 
